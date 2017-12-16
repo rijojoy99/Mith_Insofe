@@ -7,6 +7,8 @@ library(lubridate)
 library(Smisc)
 library(laeken)
 library(DMwR)
+library(car)
+
 student_data <- read.csv("train.csv",header = T , sep = ",")
 
 str(student_data)
@@ -27,10 +29,6 @@ student_data[,var] <- sapply(student_data[,var],function(x) ifelse(x==-1,NA,x))
 apply(student_data,2,pMiss_na)
 apply(student_data,2,pMiss_null)
 
-# Found its more meaningfull to add this column into the dataset
-# student_data$age <- 
-student_data$age <-  (as.numeric(student_data$Year.of.Graduation.Completion) -  as.numeric(year(lubridate::mdy(formatDT(c(student_data$Date.Of.Birth), posix = FALSE)$date))))
-
 # Convert to factors 
 # ->CollegeCode,CollegeTier,Year.of.Graduation.Completion,CityCode,CityTier,Year.of.Graduation.Completion
 
@@ -41,7 +39,10 @@ student_data$CityCode <- as.character(student_data$CityCode)
 student_data$CityTier <- as.character(student_data$CityTier)
 student_data$Year.of.Graduation.Completion <- as.character(student_data$Year.of.Graduation.Completion)
 student_data$Date.Of.Birth <- as.character(student_data$Date.Of.Birth)
-summary(student_data) 
+
+# Found its more meaningfull to add this column into the dataset
+# student_data$age <- 
+student_data$age <-  (as.numeric(student_data$Year.of.Graduation.Completion) -  as.numeric(year(lubridate::mdy(formatDT(c(student_data$Date.Of.Birth), posix = FALSE)$date))))
 
 
 # Dropping off ID columns as they do not impact the Model development
@@ -59,5 +60,39 @@ student_data<-centralImputation(student_data)
 apply(student_data,2,pMiss_na)
 
 summary(student_data)
+str(student_data)
 
+scatterplotMatrix(student_data[,2:33])
+
+numeric_cols <- c("Score.in.Tenth",
+                  "School.Board.in.Tenth",
+                  "Score.in.Twelth",
+                  "GPA.Score.in.Graduation",
+                  "Score.in.English.language",
+                  "Score.in.Logical.skill",
+                  "Score.in.Quantitative.ability",
+                  "Score.in.Domain",
+                  "Score.in.ComputerProgramming",
+                  "Score.in.ElectronicsAndSemicon",
+                  "Score.in.ComputerScience",
+                  "Score.in.MechanicalEngg",
+                  "Score.in.ElectricalEngg",
+                  "Score.in.TelecomEngg",
+                  "Score.in.CivilEngg",
+                  "Score.in.conscientiousness",
+                  "Score.in.agreeableness",
+                  "Score.in.extraversion",
+                  "Score.in.nueroticism",
+                  "Score.in.openess_to_experience")
+
+
+lin.reg.log <- lm(log(student_data$+1) ~ season +  h.temp + ave.temp + ave.wind + gust.wind +
+                dir.wind + as.numeric(gust.wind.hour), data = train)
+
+student_data2 <- student_data[numeric_cols]
+outlier.scores <- lofactor(student_data2, k=5)
+plot(density(outlier.scores))
+
+# plot(student_data$NoOfUnitsPurchased,student_data$TotalRevenueGenerated)
+lm_cust <- lm(student_data$NoOfUnitsPurchased ~  , data = student_data)
 
