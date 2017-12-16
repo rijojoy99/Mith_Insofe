@@ -1,7 +1,6 @@
 
 rm(list =ls(all= T))
-# setwd("E:\\Myth_Insofe")
-source("output_mith.log", echo=T)
+setwd("E:\\My Libraries\\Documents\\Hadoop")
 
 library(lubridate)
 library(Smisc)
@@ -10,9 +9,11 @@ library(DMwR)
 library(car)
 library(plyr)
 library(caTools)
+library(randomForest)
+library(dummies)
 
 student_data <- read.csv("train.csv",header = T , sep = ",")
-
+actual_test <- read.csv("test.csv",header = T,sep=",")
 str(student_data)
 summary(student_data)
 
@@ -22,6 +23,70 @@ summary(student_data)
 pMiss_na <- function(x){sum(is.na(x))/length(x)*100}
 pMiss_null <- function(x){sum(is.null(x))/length(x)*100}
 
+
+
+# Found its more meaningfull to add this column into the dataset
+
+student_data$Date.Of.Birth_1 <- as.character(student_data$Date.Of.Birth)
+student_data$age <-  (as.numeric(student_data$Year.of.Graduation.Completion) -  as.numeric(year(lubridate::mdy(formatDT(c(student_data$Date.Of.Birth_1), posix = FALSE)$date))))
+# View(student_data)
+student_data$Date.Of.Birth_1 <- NULL
+str(student_data)
+# Convert to factors 
+# ->CollegeCode,CollegeTier,Year.of.Graduation.Completion,CityCode,CityTier,Year.of.Graduation.Completion
+
+student_data$Gender <- as.factor(student_data$Gender)
+student_data$CollegeCode <- as.factor(student_data$CollegeCode)
+student_data$CollegeTier <- as.factor(student_data$CollegeTier)
+student_data$CityCode <- as.factor(student_data$CityCode) #,levels = levels(actual_test$CityCode))
+student_data$CityTier <- as.factor(student_data$CityTier) #,levels = levels(actual_test$CityTier))
+student_data$Year.of.Graduation.Completion <- as.factor(student_data$Year.of.Graduation.Completion)
+student_data$Graduation<- as.factor(student_data$Graduation)
+student_data$State  <- factor(student_data$State,levels = levels(actual_test$State))
+student_data$Year.Of.Twelth.Completion <- factor(student_data$Year.Of.Twelth.Completion)
+
+# Dropping off ID columns as they do not impact the Model development
+#Age is calculated- removing DOB
+
+student_data$Candidate.ID <- NULL
+student_data$Date.Of.Birth <- NULL
+student_data$CityCode <- NULL
+
+# student_data$State <- NULL
+str(student_data)
+summary(student_data)
+
+str(student_data)
+
+col_list <- c( "Score.in.Tenth",
+  "School.Board.in.Tenth",
+  "Year.Of.Twelth.Completion",
+  "Score.in.Twelth",
+  "Board.in.Twelth",
+  "GPA.Score.in.Graduation",
+  "Score.in.English.language",
+  "Score.in.Logical.skill",
+  "Score.in.Quantitative.ability",
+  "Score.in.ComputerProgramming",
+  "Score.in.ElectronicsAndSemicon",
+  "Score.in.ComputerScience",
+  "Score.in.MechanicalEngg",
+  "Score.in.ElectricalEngg",
+  "Score.in.TelecomEngg",
+  "Score.in.CivilEngg",
+  "Score.in.conscientiousness",
+  "Score.in.agreeableness",
+  "Score.in.extraversion",
+  "Score.in.nueroticism",
+  "Score.in.openess_to_experience",
+  "Score.in.Domain",
+  "age"
+)
+
+
+str(student_data)
+sum(is.na(student_data))
+#Impute NA's in the dataset
 var <- c("School.Board.in.Tenth","Score.in.Twelth")
 student_data[,var] <- sapply(student_data[,var],function(x) ifelse(x=="0",NA,x))
 
@@ -30,273 +95,79 @@ student_data[,var] <- sapply(student_data[,var],function(x) ifelse(x==-1,NA,x))
 
 apply(student_data,2,pMiss_na)
 apply(student_data,2,pMiss_null)
-
-# Convert to factors 
-# ->CollegeCode,CollegeTier,Year.of.Graduation.Completion,CityCode,CityTier,Year.of.Graduation.Completion
-
-student_data$CollegeCode <- as.character(student_data$CollegeCode)
-student_data$CollegeTier <- as.character(student_data$CollegeTier)
-student_data$Year.Of.Twelth.Completion <- as.character(student_data$Year.Of.Twelth.Completion)
-student_data$CityCode <- as.character(student_data$CityCode)
-student_data$CityTier <- as.character(student_data$CityTier)
-student_data$Year.of.Graduation.Completion <- as.character(student_data$Year.of.Graduation.Completion)
-student_data$Date.Of.Birth <- as.character(student_data$Date.Of.Birth)
-
-# Found its more meaningfull to add this column into the dataset
-# student_data$age <- 
-student_data$age <-  (as.numeric(student_data$Year.of.Graduation.Completion) -  as.numeric(year(lubridate::mdy(formatDT(c(student_data$Date.Of.Birth), posix = FALSE)$date))))
-
-
-# Dropping off ID columns as they do not impact the Model development
-#Age is calculated- removing DOB
-student_data$Date.Of.Birth <- NULL
-student_data$Candidate.ID<- NULL
-str(student_data)
-summary(student_data)
-
-<<<<<<< HEAD
-
-=======
-write.csv(x = student_data,file = "After_NA.csv")
->>>>>>> 81e3f62d21af61cf62d0d020dfc985d33858cfa1
-
-#Impute NA's in the dataset
-
-student_data_Imp<-centralImputation(student_data[, !names(student_data) %in% "Pay_in_INR"])
+student_data[, names(student_data) %in% col_list] <- sapply(student_data[, names(student_data) %in% col_list],function(x) ifelse(x=="",NA,x))
+student_data[, names(student_data) %in% col_list]<-knnImputation(student_data[, names(student_data) %in% col_list], k = 5)
 apply(student_data,2,pMiss_na)
 
-student_data <- data.frame(cbind(student_data$Pay_in_INR,student_data_Imp))
-student_data <- rename(student_data, c("student_data.Pay_in_INR"="Pay_in_INR"))
+
+student_data$CollegeCode <- as.numeric(student_data$CollegeCode )
+summary(student_data)
+
+apply(student_data,2,pMiss_na)
+
 str(student_data)
-
-<<<<<<< HEAD
-=======
-# numeric_cols <- c("Score.in.Tenth",
-#                   "School.Board.in.Tenth",
-#                   "Score.in.Twelth",
-#                   "GPA.Score.in.Graduation",
-#                   "Score.in.English.language",
-#                   "Score.in.Logical.skill",
-#                   "Score.in.Quantitative.ability",
-#                   "Score.in.Domain",
-#                   "Score.in.ComputerProgramming",
-#                   "Score.in.ElectronicsAndSemicon",
-#                   "Score.in.ComputerScience",
-#                   "Score.in.MechanicalEngg",
-#                   "Score.in.ElectricalEngg",
-#                   "Score.in.TelecomEngg",
-#                   "Score.in.CivilEngg",
-#                   "Score.in.conscientiousness",
-#                   "Score.in.agreeableness",
-#                   "Score.in.extraversion",
-#                   "Score.in.nueroticism",
-#                   "Score.in.openess_to_experience")
-# 
-# student_data2 <- student_data[numeric_cols]
-# outlier.scores <- lofactor(student_data2, k=5)
-# plot(density(outlier.scores))
-# summary(outlier.scores)
-# outliers <- order(outlier.scores, decreasing=T)[1:5]
-# outliers
-# View(student_data2)
-
-# plot(student_data$NoOfUnitsPurchased,student_data$TotalRevenueGenerated)
-
-
->>>>>>> 81e3f62d21af61cf62d0d020dfc985d33858cfa1
+summary(student_data)
 set.seed(12345)
 
-sample = sample.split(student_data$Pay_in_INR, SplitRatio = 0.70)
+sample = sample.split(student_data$Pay_in_INR, SplitRatio = 0.80)
 
 train = subset(student_data, sample == TRUE)
 test  = subset(student_data, sample == FALSE)
 
-except_targt <- student_data[, names(student_data) != "Pay_in_INR"]  
-columns_non_trgt <- colnames(except_targt)
-<<<<<<< HEAD
-columns_non_trgt
+str(train)
+sum(is.na(student_data))
 
-#################### MODEL BUILD ###############
-# Model 02
-#Normal regression
-lin.reg2 <- lm(Pay_in_INR ~ Gender +Score.in.Tenth+
-                 School.Board.in.Tenth+Year.Of.Twelth.Completion+
-                 Score.in.Twelth+Board.in.Twelth+
-                 CollegeCode+CollegeTier+
-                 Graduation+Discipline+
-                 GPA.Score.in.Graduation+CityCode+
-                 CityTier+State+
-                 Year.of.Graduation.Completion+Score.in.English.language+
-                 Score.in.Logical.skill+Score.in.Quantitative.ability+
-                 Score.in.Domain+Score.in.ComputerProgramming+
-                 Score.in.ElectronicsAndSemicon+Score.in.ComputerScience+
-                 Score.in.MechanicalEngg+Score.in.ElectricalEngg+
-                 Score.in.TelecomEngg+Score.in.CivilEngg+
-                 Score.in.conscientiousness+Score.in.agreeableness+
-                 Score.in.extraversion+Score.in.nueroticism+
-                 Score.in.openess_to_experience+age, data = train)
-=======
-class(columns_non_trgt)
+rf <- randomForest(Pay_in_INR ~., data = student_data, importance = TRUE, ntree=400,
+                   mtry = 6,keep.forest=TRUE, votes = T,
+                   oob_score = TRUE,na.action=na.exclude)
 
-# Model 01
-# Normal Reg with log
-lin.reg1 <- lm(log(Pay_in_INR+1) ~., data = train)
+which.min(rf$mse)
+imp <- as.data.frame(sort(importance(rf)[,1],decreasing = TRUE),optional = T)
+names(imp) <- "% Inc MSE"
+imp
+test.pred.forest <- predict(rf,test)
+RMSE.forest <- sqrt(mean((test.pred.forest-test$Pay_in_INR)^2, na.rm = TRUE ))
+RMSE.forest
+MAE.forest <- mean(abs(test.pred.forest-test$Pay_in_INR))
+MAE.forest
 
-# Inspect the model
-summary(lin.reg1)
+mape <- function(actual,pred){
+  mape <- mean(abs((actual - pred)/actual))*100
+  return (mape)
+}
 
-exp(lin.reg1$coefficients["train.age"])
-test.pred.lin1 <- exp(predict(lin.reg1,test))-1
-RMSE.lin.reg1 <- sqrt(mean((test.pred.lin1-test$Pay_in_INR)^2))
-RMSE.lin.reg1
+mape(test$Pay_in_INR,test.pred.forest)
 
-MAE.lin.reg1 <- mean(abs(test.pred.lin1-test$Pay_in_INR))
-MAE.lin.reg1
+varImpPlot(rf,
+           sort = T,
+           main="Variable Importance",
+           n.var=20)
 
-# Model 02
-#Normal regression
-lin.reg2 <- lm(train$Pay_in_INR ~., data = train)
->>>>>>> 81e3f62d21af61cf62d0d020dfc985d33858cfa1
-
-# Inspect the model
-summary(lin.reg2)
-
-<<<<<<< HEAD
-test.pred.lin2 <- exp(predict(lin.reg2,test))
-=======
-exp(lin.reg1$coefficients["train.age"])
-test.pred.lin2 <- exp(predict(lin.reg2,test))-1
->>>>>>> 81e3f62d21af61cf62d0d020dfc985d33858cfa1
-RMSE.lin.reg2 <- sqrt(mean((test.pred.lin2-test$rain)^2))
-RMSE.lin.reg2
-
-MAE.lin.reg2 <- mean(abs(test.pred.lin2-test$rain))
-MAE.lin.reg2
+plot(rf)
 
 
-<<<<<<< HEAD
-# Model 03
-=======
->>>>>>> 81e3f62d21af61cf62d0d020dfc985d33858cfa1
-### Applying VIF
-
-log_reg_step = stepAIC(lin.reg2, direction = "both")
-
-logreg_AIC=lm(Pay_in_INR ~ .,data = train)
-
-# All Subsets Regression
-library(leaps)
-attach(mydata)
-leaps<-regsubsets(y~.,data=mydata,nbest=10)
-# view results 
-summary(leaps)
-# plot a table of models showing variables in each model.
-# models are ordered by the selection statistic.
-plot(leaps,scale="r2")
-# plot statistic by subset size 
-library(car)
-subsets(leaps, statistic="rsq")
-
-prob_train_AIC <- predict(logreg_AIC, type="response")
-pred_AIC <- prediction(prob_train_AIC, train$Pay_in_INR)
-
-perf_AIC <- performance(pred_AIC, measure="tpr", x.measure="fpr")
-plot(perf_AIC, col=rainbow(10), colorize=T, print.cutoffs.at=seq(0,1,0.1))
-
-preds_test_AIC <- ifelse(prob_train_AIC > 0.4, "1", "0")
-table(preds_test_AIC,train$Pay_in_INR)
-
-
-prob_test_AIC<-predict(logreg_AIC,test1,type="response")
-pred_test_AIC<-ifelse(prob_test_AIC>0.4,"1","0")
-table(pred_test_AIC,test1$Pay_in_INR)
+test_predicted <- predict(rf,test)
+# write.csv(x = test_predicted,file = "predicted_val_2.csv")
 
 
 
-#Calculating Area under curve
-perf_auc_AIC <- performance(pred_AIC, measure="auc")
-auc_AIC <- perf_auc_AIC@y.values[[1]]
-print(auc_AIC)
+# Round the values and print the table
+
+actual_test$Date.Of.Birth_1 <- as.character(actual_test$Date.Of.Birth)
+actual_test$age <-  (as.numeric(actual_test$Year.of.Graduation.Completion) -  as.numeric(year(lubridate::mdy(formatDT(c(actual_test$Date.Of.Birth_1), posix = FALSE)$date))))
+str(actual_test)
 
 
-conf_matrix1<-table(test1$Pay_in_INR,pred_test_AIC)
-print(conf_matrix1)
-specif<-round(conf_matrix1[1,1]/sum(conf_matrix1[1,]),4)
-sensit<-round(conf_matrix1[2,2]/sum(conf_matrix1[2,]),4)
-accu<-round(sum(diag(conf_matrix1))/sum(conf_matrix1),4)
-print(c("accuracy",accu,"specificity",specif,"sensitivity",sensit))
+actual_test$CollegeCode <- as.factor(actual_test$CollegeCode)
+actual_test$CollegeTier <- as.factor(actual_test$CollegeTier)
+actual_test$Gender <- as.factor(actual_test$Gender)
+actual_test$CityCode <- as.factor(actual_test$CityCode) #,levels = levels(actual_test$CityCode))
+actual_test$CityTier <- as.factor(actual_test$CityTier) #,levels = levels(actual_test$CityTier))
+actual_test$Year.of.Graduation.Completion <- as.factor(actual_test$Year.of.Graduation.Completion)
+actual_test$Date.Of.Birth <- as.character(actual_test$Date.Of.Birth,levels = levels(actual_test$Date.Of.Birth))
+actual_test$Graduation<- as.factor(actual_test$Graduation) #,levels = levels(actual_test$Graduation))
+actual_test$State  <- factor(actual_test$State,levels = levels(actual_test$State))
+actual_test$Year.Of.Twelth.Completion <- factor(actual_test$Year.Of.Twelth.Completion)
 
-
-vif(logreg_AIC)
-
-
-<<<<<<< HEAD
-
-# Model 01
-# Normal Reg with log
-lin.reg1 <- lm(log(Pay_in_INR+1) ~., data = train)
-
-# Inspect the model
-summary(lin.reg1)
-
-exp(lin.reg1$coefficients["train.age"])
-test.pred.lin1 <- exp(predict(lin.reg1,test))-1
-RMSE.lin.reg1 <- sqrt(mean((test.pred.lin1-test$Pay_in_INR)^2))
-RMSE.lin.reg1
-
-MAE.lin.reg1 <- mean(abs(test.pred.lin1-test$Pay_in_INR))
-MAE.lin.reg1
-
-# Model 04
-
-=======
->>>>>>> 81e3f62d21af61cf62d0d020dfc985d33858cfa1
-# Needed to grow a tree
-library(rpart)
-# To draw a pretty tree (fancyRpartPlot function)
-library(rattle)
-
-# rpart function applied to a numeric variable => regression tree
-<<<<<<< HEAD
-rt <- rpart(Pay_in_INR ~ ., data=train)
-=======
-rt <- rpart(rain ~ month + season + l.temp + h.temp + ave.temp + ave.wind +
-             gust.wind + dir.wind + dir.wind.8 + as.numeric(h.temp.hour)+
-               as.numeric(l.temp.hour)+ as.numeric(gust.wind.hour), data=train)
->>>>>>> 81e3f62d21af61cf62d0d020dfc985d33858cfa1
-
-# Full-grown tree with 8 splits using 6 different variables 
-# (Not running the line below - do it to see the tree)
-# fancyRpartPlot(rt)
-  
-# As always, predict and evaluate on the test set
- test.pred.rtree <- predict(rt,test) 
-
-RMSE.rtree <- sqrt(mean((test.pred.rtree-test$rain)^2))
-RMSE.rtree
-#[1] 11.37786
-
-MAE.rtree <- mean(abs(test.pred.rtree-test$rain))
-MAE.rtree
-#[1] 6.140937
-
-<<<<<<< HEAD
-#Now that we have a full-grown tree, let's see if it's possible to prune it.
-=======
-#Now that we have a full-grown tree, let’s see if it’s possible to prune it…
->>>>>>> 81e3f62d21af61cf62d0d020dfc985d33858cfa1
-
-# Check cross-validation results (xerror column)
-# It corresponds to 2 splits and cp = 0.088147
-printcp(rt)
-
-
-
-
-
-
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 81e3f62d21af61cf62d0d020dfc985d33858cfa1
+test_predicted <- roundpredict(rf,actual_test)
+write.csv(x = test_predicted,file = "predicted_val_2.csv")
