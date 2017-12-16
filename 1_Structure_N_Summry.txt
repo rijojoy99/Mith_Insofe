@@ -1,0 +1,119 @@
+> str(student_data)
+'data.frame':	26415 obs. of  34 variables:
+ $ Candidate.ID                  : int  304390 1104236 1015299 781929 271036 692668 182696 338449 457565 577498 ...
+ $ Pay_in_INR                    : num  400000 145000 200000 300000 530000 70000 320000 180000 500000 295000 ...
+ $ Gender                        : Factor w/ 2 levels "f","m": 2 1 1 1 2 2 2 2 1 2 ...
+ $ Date.Of.Birth                 : Factor w/ 2639 levels "1981-05-06 00:00",..: 1452 2289 1909 2053 815 2068 495 1618 1309 1744 ...
+ $ Score.in.Tenth                : num  67.6 71 75 85 88.6 ...
+ $ School.Board.in.Tenth         : Factor w/ 263 levels "0","aisse","andhra pradesh board ssc",..: 53 53 89 53 108 216 243 216 1 216 ...
+ $ Year.Of.Twelth.Completion     : int  2007 2009 2010 2008 2006 2009 2004 2009 2008 2009 ...
+ $ Score.in.Twelth               : num  70.2 64 66.8 69 65.2 ...
+ $ Board.in.Twelth               : Factor w/ 330 levels " board of intermediate",..: 71 71 71 71 164 277 306 277 3 277 ...
+ $ CollegeCode                   : int  494 4889 7827 1125 1629 13697 429 11637 1388 7376 ...
+ $ CollegeTier                   : int  2 2 2 2 2 2 2 2 1 2 ...
+ $ Graduation                    : Factor w/ 3 levels "B.Tech/B.E.",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ Discipline                    : Factor w/ 46 levels "aeronautical engineering",..: 21 34 22 34 11 14 34 11 11 40 ...
+ $ GPA.Score.in.Graduation       : num  60.9 81 68.5 75 74.8 ...
+ $ CityCode                      : int  494 4889 7827 1125 1629 13697 429 11637 1388 7376 ...
+ $ CityTier                      : int  1 1 0 0 1 1 0 0 0 0 ...
+ $ State                         : Factor w/ 26 levels "Andhra Pradesh",..: 15 21 24 17 12 26 24 14 8 24 ...
+ $ Year.of.Graduation.Completion : int  2011 2013 2014 2013 2011 2013 2011 2013 2012 2013 ...
+ $ Score.in.English.language     : int  525 615 370 605 435 450 405 425 755 415 ...
+ $ Score.in.Logical.skill        : int  495 455 470 440 485 355 395 515 545 545 ...
+ $ Score.in.Quantitative.ability : int  555 355 260 445 465 295 605 565 585 545 ...
+ $ Score.in.Domain               : num  0.694 0.487 0.322 0.342 0.865 ...
+ $ Score.in.ComputerProgramming  : int  -100 335 385 365 525 455 435 525 505 -100 ...
+ $ Score.in.ElectronicsAndSemicon: int  366 -100 196 -100 -100 -100 -100 -100 -100 -100 ...
+ $ Score.in.ComputerScience      : int  -100 376 -100 -100 125 123 -100 407 139 -100 ...
+ $ Score.in.MechanicalEngg       : int  -100 -100 -100 -100 -100 -100 -100 -100 -100 420 ...
+ $ Score.in.ElectricalEngg       : int  -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 ...
+ $ Score.in.TelecomEngg          : int  -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 ...
+ $ Score.in.CivilEngg            : int  -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 ...
+ $ Score.in.conscientiousness    : num  -0.881 -3.893 1.134 0.99 1.227 ...
+ $ Score.in.agreeableness        : num  -0.591 -5.615 1.711 -0.121 -0.478 ...
+ $ Score.in.extraversion         : num  -0.344 -3.986 0.164 -0.144 -0.344 ...
+ $ Score.in.nueroticism          : num  -0.7603 -0.8682 0.7798 0.0192 -0.1727 ...
+ $ Score.in.openess_to_experience: num  -0.919 -6.609 0.48 -0.286 -1.839 ...
+> 
+
+> summary(student_data)
+  Candidate.ID       Pay_in_INR      Gender             Date.Of.Birth   Score.in.Tenth 
+ Min.   :  11244   Min.   :  35000   f: 4024   1988-08-25 00:00:   80   Min.   :43.00  
+ 1st Qu.:1305079   1st Qu.: 511000   m:22391   1989-05-27 00:00:   71   1st Qu.:75.81  
+ Median :1314503   Median : 575000             1990-07-16 00:00:   67   Median :82.32  
+ Mean   :1240347   Mean   : 641658             1991-07-15 00:00:   64   Mean   :80.82  
+ 3rd Qu.:1324011   3rd Qu.: 671000             1989-06-04 00:00:   57   3rd Qu.:86.96  
+ Max.   :1333391   Max.   :4000000             1991-09-17 00:00:   57   Max.   :97.76  
+                                               (Other)         :26019                  
+ School.Board.in.Tenth Year.Of.Twelth.Completion Score.in.Twelth    Board.in.Twelth
+ cbse       :9385      Min.   :1998              Min.   :40.00   cbse       :9449  
+ 0          :5145      1st Qu.:2006              1st Qu.:71.56   0          :5141  
+ state board:3087      Median :2007              Median :78.70   state board:3678  
+ icse       :1899      Mean   :2007              Mean   :78.14   up board   : 808  
+ ssc        : 950      3rd Qu.:2008              3rd Qu.:85.11   icse       : 632  
+ up board   : 807      Max.   :2012              Max.   :98.20   isc        : 616  
+ (Other)    :5142                                                (Other)    :6091  
+  CollegeCode     CollegeTier          Graduation   
+ Min.   :    2   Min.   :1.00   B.Tech/B.E. :24672  
+ 1st Qu.:  285   1st Qu.:2.00   M.Tech./M.E.:  397  
+ Median : 1622   Median :2.00   MCA         : 1346  
+ Mean   : 3583   Mean   :1.84                       
+ 3rd Qu.: 6164   3rd Qu.:2.00                       
+ Max.   :18409   Max.   :2.00                       
+                                                    
+                                     Discipline   GPA.Score.in.Graduation    CityCode    
+ computer engineering                     :8193   Min.   : 6.45           Min.   :    2  
+ electronics and communication engineering:4790   1st Qu.:69.02           1st Qu.:  285  
+ information technology                   :4693   Median :73.39           Median : 1622  
+ computer science & engineering           :2736   Mean   :73.47           Mean   : 3587  
+ mechanical engineering                   :1392   3rd Qu.:77.49           3rd Qu.: 6164  
+ computer application                     :1371   Max.   :99.93           Max.   :18409  
+ (Other)                                  :3240                                          
+    CityTier                 State       Year.of.Graduation.Completion
+ Min.   :0.0000   Uttar Pradesh : 5941   Min.   :2007                 
+ 1st Qu.:0.0000   Karnataka     : 3028   1st Qu.:2011                 
+ Median :0.0000   Telangana     : 1997   Median :2012                 
+ Mean   :0.3067   Tamil Nadu    : 1775   Mean   :2012                 
+ 3rd Qu.:1.0000   Andhra Pradesh: 1705   3rd Qu.:2013                 
+ Max.   :1.0000   Haryana       : 1559   Max.   :2017                 
+                  (Other)       :10410                                
+ Score.in.English.language Score.in.Logical.skill Score.in.Quantitative.ability
+ Min.   :187.0             Min.   :195.0          Min.   :120.0                
+ 1st Qu.:465.0             1st Qu.:471.0          1st Qu.:504.0                
+ Median :525.0             Median :534.0          Median :575.0                
+ Mean   :527.8             Mean   :526.9          Mean   :566.6                
+ 3rd Qu.:591.0             3rd Qu.:588.0          3rd Qu.:634.0                
+ Max.   :850.0             Max.   :735.0          Max.   :900.0                
+                                                                               
+ Score.in.Domain   Score.in.ComputerProgramming Score.in.ElectronicsAndSemicon
+ Min.   :-1.0000   Min.   :-100.0               Min.   :-100.00               
+ 1st Qu.: 0.5192   1st Qu.: 355.0               1st Qu.:-100.00               
+ Median : 0.7466   Median : 468.0               Median :-100.00               
+ Mean   : 0.6598   Mean   : 401.7               Mean   :  25.27               
+ 3rd Qu.: 0.8841   3rd Qu.: 541.0               3rd Qu.: 187.00               
+ Max.   : 0.9999   Max.   : 840.0               Max.   : 566.00               
+                                                                              
+ Score.in.ComputerScience Score.in.MechanicalEngg Score.in.ElectricalEngg Score.in.TelecomEngg
+ Min.   :-100.0           Min.   :-100.00         Min.   :-100.00         Min.   :-100.00     
+ 1st Qu.:-100.0           1st Qu.:-100.00         1st Qu.:-100.00         1st Qu.:-100.00     
+ Median :-100.0           Median :-100.00         Median :-100.00         Median :-100.00     
+ Mean   :  38.4           Mean   : -60.24         Mean   : -91.07         Mean   : -71.49     
+ 3rd Qu.: 134.0           3rd Qu.:-100.00         3rd Qu.:-100.00         3rd Qu.:-100.00     
+ Max.   : 715.0           Max.   : 623.00         Max.   : 676.00         Max.   : 548.00     
+                                                                                              
+ Score.in.CivilEngg Score.in.conscientiousness Score.in.agreeableness Score.in.extraversion
+ Min.   :-100.00    Min.   :-4.1267            Min.   :-5.7816        Min.   :-4.60090     
+ 1st Qu.:-100.00    1st Qu.:-0.7359            1st Qu.:-0.1651        1st Qu.:-0.49505     
+ Median :-100.00    Median :-0.1314            Median : 0.3093        Median : 0.01000     
+ Mean   : -90.43    Mean   :-0.1990            Mean   : 0.2224        Mean   :-0.03659     
+ 3rd Qu.:-100.00    3rd Qu.: 0.4184            3rd Qu.: 0.6843        3rd Qu.: 0.47110     
+ Max.   : 500.00    Max.   : 1.9953            Max.   : 1.9048        Max.   : 2.53540     
+                                                                                           
+ Score.in.nueroticism Score.in.openess_to_experience
+ Min.   :-2.6430      Min.   :-7.3757               
+ 1st Qu.:-0.7068      1st Qu.:-0.5816               
+ Median :-0.2146      Median :-0.0943               
+ Mean   :-0.1977      Mean   :-0.1345               
+ 3rd Qu.: 0.2924      3rd Qu.: 0.3676               
+ Max.   : 3.3525      Max.   : 1.8224               
+                                             

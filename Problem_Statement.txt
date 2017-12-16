@@ -1,0 +1,107 @@
+Forecasting is an important approach to take an optimal decision to run any organization.
+Predicting the possible earnings package for the candidate based on the profile 
+ie., with the help of various factors such as demographic/personal details, 
+academic background, different soft skills details. 
+A leading IT company wants to automate its recruitment cell including 
+the pay fixations as one of the components of its automated system.
+ For this component, it wants to build a forecasting engine for the 
+ pay scales for the individuals based on their demographics/personal 
+ information, academic background and soft skills. Compensation planning 
+ is very important for the companies to make sure the continued retention
+ of the high performers with the best talent and skill set. Hence, 
+ the optimal pay offer is important which is possible by this forecasting engine. 
+ This engines helps the organization to offer the appropriate pay and to meet the 
+ possible expectations of the candidate also. 
+ 
+ This kind of engine can be used by the career counselling companies also to provide 
+ proper guidance to students/candidates by matching the profile. 
+ Also the engine can be used by the educational institutions / boards to understand 
+ their student groups' employability level in the market and take action accordingly 
+ for organizational growth. Selecting the important factors/features that affect 
+ the pay offered to a candidate, could give an idea of different skills
+ and their scores expected by the industry.
+ You are expected to do independent search in understanding the factors and the domain
+ in little more detail and forecast the pay to an individual based on the data provided. 
+ Also study the data which is provided to you and make your own notes on how you can use
+ the data most effectively to predict the compensation/salary. 
+ Discuss if your model is universal or can help only one segment of people 
+ (like, only pay fixation department in an organization or career counselling company etc.).
+ Justify properly for any argument or assumptions you make.
+
+
+logo INSOFE
+MiTH - Batch 33
+MiTH Instructions (current)
+Logged in as Rijo Joy
+ Log off
+MiTH Instructions
+MiTH Instructions
+Forecasting the pay offered/expected to a candidate based on various factors
+
+Problem Description
+
+Forecasting is an important approach to take an optimal decision to run any organization. Predicting the possible earnings package for the candidate based on the profile ie., with the help of various factors such as demographic/personal details, academic background, different soft skills details.
+A leading IT company wants to automate its recruitment cell including the pay fixations as one of the components of its automated system. For this component, it wants to build a forecasting engine for the pay scales for the individuals based on their demographics/personal information, academic background and soft skills. Compensation planning is very important for the companies to make sure the continued retention of the high performers with the best talent and skill set. Hence, the optimal pay offer is important which is possible by this forecasting engine.
+This engines helps the organization to offer the appropriate pay and to meet the possible expectations of the candidate also. This kind of engine can be used by the career counselling companies also to provide proper guidance to students/candidates by matching the profile. Also the engine can be used by the educational institutions / boards to understand their student groups' employability level in the market and take action accordingly for organizational growth. Selecting the important factors/features that affect the pay offered to a candidate, could give an idea of different skills and their scores expected by the industry.
+You are expected to do independent search in understanding the factors and the domain in little more detail and forecast the pay to an individual based on the data provided. Also study the data which is provided to you and make your own notes on how you can use the data most effectively to predict the compensation/salary. Discuss if your model is universal or can help only one segment of people (like, only pay fixation department in an organization or career counselling company etc.). Justify properly for any argument or assumptions you make.
+The datasets are provided as cited below for forecasting the pay:
+
+AttributeLevelsDescription_MITH.xls - depicts attributes description
+Data : i.Train.csv, ii.Test.csv
+Note: The attributes "Score in ComputerProgramming", "Score in ElectronicsAndSemicon", "Score in ComputerScience", "Score in MechanicalEngg", "Score in ElectricalEngg", "Score in TelecomEngg", "Score in CivilEngg" should be considered while building the model. You may do the feature engineering here without dropping them.
+
+Submission 1 (16th Dec 2017 by 6 PM):
+Note - Only 4 submissions allowed
+
+Train Data
+Target attribute is “Pay_in_INR" for forecasting.
+
+This dataset has the factors that lead to the pay computation ie., details include the demographics/personal information, academic qualification details and soft skills details.
+
+This file should be used for data exploration and visualization to answer the following:
+
+1) what are the highly correlated attributes within independent attributes
+2) what are the highly correlated attributes with the target attribute
+3) Do the data exploration and extract the insights from the visualization
+
+Study the data to find if any salary disparity is there between the specific groups like gender or institution or state or board etc.
+Test Data Test.csv should act as totally unseen data for the model and hence it does not have the target attribute, “Pay_in_INR".
+The predictions obtained for the Test.csv dataset should be uploaded to Grader tool with the name “predictions.csv”.
+Note
+Missing values are denoted as “” or ”NA” in general in the datasets. Please go through the document "AttributeLevelsDescription_MITH.xls" thoroughly to address different aspects in the data.
+
+NA is the missing symbol for the attribute "Date Of Birth"
+
+The “0” is considered as missing symbol for the attributes "School Board in Tenth" & "Board in Twelth"
+
+The “-1” is considered as missing symbol for the attributes “Score in Domain”
+
+Documents to be submitted into Grader tool
+Visualization & Modeling
+Report on : High level steps on problem understanding and pre-processing & also explain why you have chosen your model as the best model with the name “Report.doc”
+Commented Code developed for Preprocessing, visualisation and modeling with the name “submission.R” or “submission.ipynb” as the case may be.
+Upload the predictions obtained on the dataset “Test.csv”, to Grader tool with the name “predictions.csv”.
+Submission 2 (17th Dec 2017 by 6 AM):
+Viva Presentation:
+Final presentation for viva with the name “viva.ppt”
+
+1
+​
+Submit
+Information
+Author(s)	
+Deadline	17/12/2017 20:00:00
+Status	Not yet attempted
+Grade	0.0%
+Grading weight	1.0
+Attempts	0
+Submission limit	No limitation
+Submitting as
+  Rijo Joy
+  Classroom : Default classroom
+For evaluation
+ Best submission
+ No submission
+Submission history
+No submission
+© 2017 - INSOFE Grader - International School of Engineering Status
