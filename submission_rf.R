@@ -69,8 +69,6 @@ library(dummies)
 summary(student_data)
 str(student_data)
 
-
-
 student_data$Graduation<- factor(student_data$Graduation)
 
 #Impute NA's in the dataset
